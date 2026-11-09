@@ -1,0 +1,92 @@
+{
+  "name": "strazh-pk",
+  "productName": "StrazhPC",
+  "version": "0.2.0",
+  "description": "Помощник для вашего компьютера: ищет угрозы и освобождает место",
+  "main": "src/main/main.js",
+  "author": "olegche",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "selftest": "node scripts/selftest.js",
+    "dist": "electron-builder --win nsis portable --x64",
+    "release": "electron-builder --win nsis portable --x64 --publish always"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11",
+    "ffmpeg-static": "^5.3.0",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "electron": "^45.2.3",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "ru.olegche.strazhpc",
+    "productName": "StrazhPC",
+    "executableName": "StrazhPC",
+    "copyright": "olegche",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json",
+      "build/icon.png"
+    ],
+    "asarUnpack": [
+      "node_modules/ffmpeg-static/**",
+      "node_modules/sharp/**",
+      "node_modules/@img/**"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "language": "1049",
+      "shortcutName": "StrazhPC",
+      "uninstallDisplayName": "StrazhPC",
+      "artifactName": "StrazhPC-Setup-${version}.exe"
+    },
+    "portable": {
+      "artifactName": "StrazhPC-Portable-${version}.exe"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "OlegChe77",
+        "repo": "strazh-pc",
+        "releaseType": "release"
+      }
+    ]
+  },
+  "homepage": "https://github.com/OlegChe77/strazh-pc#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OlegChe77/strazh-pc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OlegChe77/strazh-pc/issues"
+  }
+}

@@ -1,0 +1,216 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Страж ПК — Терминал для всех</title>
+<style>
+:root{--bg:#050805;--panel:#0b130c;--panel2:#112015;--fg:#dcffe5;--muted:#86b391;--acc:#39ff7a;--line:#1f4a29;--bad:#ff5468;--warn:#ffc933;--ok:#39ff7a;--mono:Consolas,"Cascadia Mono",monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg) repeating-linear-gradient(0deg,#0000 0 2px,#00ff410a 2px 3px);color:var(--fg);font:16px/1.55 "Segoe UI",system-ui,sans-serif;padding-bottom:80px}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+.mono{font-family:var(--mono)}
+.glow{color:var(--acc);text-shadow:0 0 10px #39ff7a99}
+header{display:flex;align-items:center;gap:18px;padding:12px 22px;border-bottom:1px solid var(--line);flex-wrap:wrap;background:#050805ee;position:sticky;top:0;z-index:5}
+.logo{font-family:var(--mono);font-size:21px;font-weight:700}.logo small{display:block;font-size:12px;color:var(--muted);font-weight:400}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+.nv{background:none;border:1px solid transparent;border-radius:6px;padding:10px 16px;color:var(--muted);font-size:16px}
+.nv:hover{color:var(--fg);border-color:var(--line)}
+.nv.on{color:var(--acc);border-color:var(--acc);background:#39ff7a12;text-shadow:0 0 8px #39ff7a88}
+.help{margin-left:auto;color:var(--muted);text-decoration:none;font-size:14px;border:1px dashed var(--line);padding:8px 12px;border-radius:6px}.help:hover{color:var(--fg)}
+main{max-width:980px;margin:0 auto;padding:26px 20px}
+.page{display:none}.page.on{display:block;animation:fi .3s}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}}
+.title{font-family:var(--mono);font-size:25px;margin-bottom:6px}
+.lead{color:var(--muted);margin-bottom:22px;font-size:17px;max-width:720px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px}
+.btn{border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:12px 20px;min-height:48px;font-size:16px}
+.btn:hover{border-color:var(--acc)}
+.btn.pri{background:var(--acc);color:#02160a;border-color:var(--acc);font-weight:700;box-shadow:0 0 18px #39ff7a55}
+.btn.pri:hover{box-shadow:0 0 30px #39ff7aaa}
+.btn.red{background:var(--bad);border-color:var(--bad);color:#fff;font-weight:700}
+.link{background:none;border:0;color:var(--muted);text-decoration:underline;padding:12px 6px;font-size:14px}.link:hover{color:var(--bad)}
+.acts{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px}
+/* главная */
+.hero{display:flex;gap:36px;align-items:center;flex-wrap:wrap;margin-bottom:26px}
+.radar{width:220px;height:220px;border-radius:50%;border:1px solid var(--acc);position:relative;flex:none;overflow:hidden;box-shadow:0 0 30px #39ff7a22 inset;
+ background:repeating-radial-gradient(circle,#0000 0 35px,#39ff7a30 36px 37px),linear-gradient(#39ff7a30,#39ff7a30) center/1px 100% no-repeat,linear-gradient(#39ff7a30,#39ff7a30) center/100% 1px no-repeat}
+.radar::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,#39ff7a77,#0000 28%);animation:sp 3s linear infinite}
+.scanning .radar::after{animation-duration:.7s}
+@keyframes sp{to{transform:rotate(360deg)}}
+.blip{position:absolute;width:10px;height:10px;border-radius:50%;z-index:2;animation:pl 1.6s infinite}
+@keyframes pl{50%{opacity:.3}}
+.hero .tx{flex:1;min-width:280px}
+.go{font-family:var(--mono);font-size:20px;padding:18px 30px;margin-top:18px}
+.prog{height:10px;background:var(--panel2);border-radius:9px;overflow:hidden;margin:16px 0 6px;display:none}
+.prog i{display:block;height:100%;width:0;background:var(--acc);box-shadow:0 0 12px var(--acc)}
+.scanning .prog{display:block}
+.step{color:var(--muted);font-family:var(--mono);font-size:14px;min-height:22px}
+.row{display:flex;gap:16px;align-items:center;padding:16px 18px;margin-bottom:12px;border-left:5px solid var(--c);flex-wrap:wrap}
+.dot{width:16px;height:16px;border-radius:50%;background:var(--c);box-shadow:0 0 12px var(--c);flex:none}
+.row b{font-size:19px;display:block}.row .tx{flex:1;min-width:220px}.row .tx span{color:var(--muted)}
+.c-bad{--c:var(--bad)}.c-warn{--c:var(--warn)}.c-ok{--c:var(--ok)}
+.flash{animation:fl .8s}@keyframes fl{from{background:#39ff7a33}}
+/* находки */
+.f{border-left:5px solid var(--c);margin-bottom:12px;padding:0;overflow:hidden}
+.f .top{display:flex;gap:14px;align-items:center;padding:16px 18px;cursor:pointer}
+.f .top .tx{flex:1}.f .top b{font-size:18px}
+.lbl{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--c)}
+.arr{color:var(--muted);font-size:14px;white-space:nowrap}
+.f .more{display:none;padding:2px 20px 20px 48px}.f.open .more{display:block}.f.open .arr{display:none}
+.q{margin-top:14px}.q span{font-family:var(--mono);color:var(--acc);font-size:13px;letter-spacing:.05em}
+details{margin-top:14px;color:var(--muted);font-size:14px}summary{cursor:pointer}code{display:block;font-family:var(--mono);color:var(--fg);margin:6px 0;word-break:break-all}
+.f.done{opacity:.55}.f.done .more{display:none}.f.done .arr{display:inline;color:var(--acc)}
+/* место */
+.stepnum{font-family:var(--mono);color:var(--acc);font-size:14px;margin:26px 0 10px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.tile{display:flex;gap:14px;align-items:flex-start;cursor:pointer;transition:.15s}
+.tile:hover{border-color:var(--acc)}
+.tile input{position:absolute;opacity:0}
+.box{width:26px;height:26px;border:2px solid var(--line);border-radius:6px;flex:none;display:grid;place-items:center;font-weight:900;color:#02160a}
+.tile:has(input:checked){border-color:var(--acc);background:#39ff7a0d}
+.tile:has(input:checked) .box{background:var(--acc);border-color:var(--acc)}
+.tile:has(input:checked) .box::after{content:"✓"}
+.tile .e{font-size:26px;line-height:1}.tile b{display:block;font-size:17px}.tile small{color:var(--muted);display:block}
+.tile .sz{font-family:var(--mono);font-size:14px;margin-top:4px}.tile .sz em{font-style:normal;color:var(--acc)}
+.guard{display:flex;gap:12px;align-items:center;border-color:var(--acc);background:#39ff7a0a;margin-bottom:6px}
+.guard .e{font-size:28px}
+.final{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:24px}
+/* ещё */
+.xs{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.x{display:flex;flex-direction:column;gap:6px}.x .e{font-size:30px}.x b{font-size:17px}.x p{color:var(--muted);font-size:15px;flex:1}.x .btn{align-self:flex-start;margin-top:8px}
+/* подсказка снизу */
+.say{position:fixed;left:0;right:0;bottom:0;background:#030603f2;border-top:1px solid var(--acc);padding:14px 22px;font-family:var(--mono);font-size:15px;z-index:6;display:flex;gap:10px}
+.cur::after{content:"█";animation:bl 1s steps(2) infinite;color:var(--acc)}@keyframes bl{50%{opacity:0}}
+.modal{position:fixed;inset:0;display:none;place-items:center;background:#000b;z-index:9;padding:16px}.modal.on{display:grid}
+.modal .card{max-width:480px;border-color:var(--acc);box-shadow:0 0 40px #39ff7a33}.modal h3{font-family:var(--mono);font-size:20px;margin-bottom:10px}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--acc);color:#02160a;font-weight:600;padding:12px 22px;border-radius:8px;z-index:10}
+@media(max-width:640px){.help{margin-left:0}.f .more{padding-left:20px}.hero{justify-content:center}}
+</style>
+<header>
+ <div class="logo"><span class="glow">STRAZH</span>://пк<small>помощник для вашего компьютера</small></div>
+ <nav><button class="nv" data-go="ov">🏠 Главная</button><button class="nv" data-go="sec">🛡️ Защита</button><button class="nv" data-go="space">🧹 Место на диске</button><button class="nv" data-go="more">🧰 Ещё</button></nav>
+ <a class="help" href="https://dalink.to/olegche" target="_blank">❤ Помощь проекту</a>
+</header>
+<main>
+<section class="page" id="ov">
+ <div class="hero" id="hero">
+  <div class="radar"><span class="blip" style="left:62%;top:30%;background:var(--bad);box-shadow:0 0 10px var(--bad)"></span><span class="blip" style="left:28%;top:64%;background:var(--warn);box-shadow:0 0 10px var(--warn)"></span></div>
+  <div class="tx">
+   <h1 class="title">Проверим ваш компьютер?</h1>
+   <p class="lead" style="margin:0">Я поищу вредные программы, папки, открытые для чужих, и то, что занимает лишнее место. <b>Сам ничего не удаляю</b> — сначала объясню и спрошу.</p>
+   <button class="btn pri go" id="scan">▶ ПРОВЕРИТЬ КОМПЬЮТЕР</button>
+   <div class="prog"><i></i></div><div class="step" id="step">Последняя проверка: сегодня в 09:12</div>
+  </div>
+ </div>
+ <div id="res">
+  <div class="card row c-bad"><span class="dot"></span><div class="tx"><b>2 опасные программы</b><span>Могут красть пароли и тормозить компьютер</span></div><button class="btn pri" data-go="sec">Разобраться</button></div>
+  <div class="card row c-warn"><span class="dot"></span><div class="tx"><b>3 места, откуда могут утечь ваши данные</b><span>Пароли на виду и папка, открытая для всех</span></div><button class="btn" data-go="sec">Посмотреть</button></div>
+  <div class="card row c-ok"><span class="dot"></span><div class="tx"><b>Можно освободить 49 ГБ</b><span>Фото и видео станут легче, а выглядеть будут так же</span></div><button class="btn" data-go="space">Освободить</button></div>
+ </div>
+</section>
+<section class="page" id="sec">
+ <h1 class="title">&gt; Защита</h1>
+ <p class="lead">Вот что я нашёл. Сверху — самое важное. Нажмите на строчку, и я объясню простыми словами.</p>
+ <div id="list"></div>
+</section>
+<section class="page" id="space">
+ <h1 class="title">&gt; Место на диске</h1>
+ <p class="lead">Сделаю файлы легче и наведу порядок. Всего три шага.</p>
+ <div class="card guard"><span class="e">🛡️</span><span>В папки Windows и установленных программ <b>я не захожу</b>. Сначала делаю сжатые копии, а оригиналы удаляю <b>только когда вы разрешите</b>.</span></div>
+ <div class="stepnum">ШАГ 1 — Что сделать легче?</div><div class="tiles" id="packs"></div>
+ <div class="stepnum">ШАГ 2 — Навести порядок? (по желанию)</div><div class="tiles" id="order"></div>
+ <div class="stepnum">ШАГ 3 — Как мне работать?</div>
+ <div class="tiles">
+  <label class="card tile"><input type="radio" name="m" checked><span class="box"></span><span><b>Спрашивать меня каждый раз</b><small>Покажу, что сделаю, и жду вашего «Да»</small></span></label>
+  <label class="card tile"><input type="radio" name="m"><span class="box"></span><span><b>Готовить самому раз в неделю</b><small>Сожму копии сам, а удалять старое буду только с вашего разрешения</small></span></label>
+ </div>
+ <div class="final"><button class="btn pri go" id="squeeze" style="margin:0">▶ СЖАТЬ</button><span class="mono" id="tot"></span></div>
+</section>
+<section class="page" id="more">
+ <h1 class="title">&gt; Ещё полезное</h1>
+ <p class="lead">Дополнительные проверки. Каждая объясняет всё простыми словами.</p>
+ <div class="xs" id="extras"></div>
+</section>
+</main>
+<div class="say"><span class="glow">&gt;</span><span><span id="say"></span><span class="cur"></span></span></div>
+<script>
+// Демо-данные: в макете ничего не сканируется и не меняется.
+const F=[
+{c:'bad',t:'Скрытая программа-майнер',a:'Обезвредить',p:'C:\\Users\\user\\AppData\\Roaming\\svchost32.exe',sys:'Лежит в скрытой папке вашей учётной записи. Притворяется файлом Windows, но настоящий лежит в другом месте.',
+ w:'Программа тайно заставляет ваш компьютер зарабатывать криптовалюту для чужих людей.',
+ r:'Компьютер тормозит, шумит и греется, детали быстрее изнашиваются, растёт счёт за электричество.',
+ s:'Выключить её и убрать в карантин — это запертая папка. Если окажется, что программа была нужна, её можно вернуть одной кнопкой.'},
+{c:'bad',t:'Похоже на шпионскую программу (троян)',a:'Обезвредить',p:'C:\\ProgramData\\Updater\\winupd.dll',sys:'Лежит в общей служебной папке программ. Название похоже на обновление Windows, но у файла нет подписи Microsoft.',
+ w:'Тихо запускается при включении компьютера и отправляет данные на чужой сервер в интернете.',
+ r:'Чужой человек может видеть ваш экран, забрать пароли от почты и банка, включить камеру.',
+ s:'Обезвредить и убрать в карантин. Потом советую сменить пароли — я подскажу, какие.'},
+{c:'warn',t:'Ваша папка открыта для всех по сети',a:'Закрыть доступ',p:'D:\\Общая',
+ w:'Папку «Общая» на диске D может открыть любой, кто подключён к вашему Wi-Fi: соседи, гости.',
+ r:'Чужие могут посмотреть или забрать ваши файлы, а могут и подложить вирус.',
+ s:'Закрыть доступ для чужих. Сами файлы в папке останутся на месте.'},
+{c:'warn',t:'Пароли записаны в обычном файле',a:'Перенести в сейф',p:'C:\\Users\\user\\Documents\\пароли.txt',
+ w:'В «Документах» лежит файл «пароли.txt». Его может прочитать любая программа, в том числе вредная.',
+ r:'Могут украсть почту, соцсети, доступ к банку.',
+ s:'Перенести пароли в «Сейф» — запертую папку, которая открывается только вашим паролем. Старый файл удалю, только если вы скажете.'},
+{c:'warn',t:'В браузере сохранены банковские карты',a:'Показать список',p:'Google Chrome: 2 карты, 14 паролей',
+ w:'Браузер помнит ваши карты и пароли. Это удобно, но вирусы-воришки ищут именно это.',
+ r:'Могут украсть деньги с карты.',
+ s:'Показать список, чтобы вы сами решили, что оставить.'},
+{c:'ok',t:'Включено управление компьютером издалека',a:'Показать, как выключить',p:'Настройка Windows «Удалённый рабочий стол»',
+ w:'К компьютеру можно подключиться через интернет и управлять им. Обычно это нужно только мастеру.',
+ r:'Небольшой риск: если пароль простой, его могут подобрать.',
+ s:'Если вы этим не пользуетесь — покажу по шагам, как выключить. Сам я настройки Windows не меняю.'}];
+const L={bad:'ОПАСНО',warn:'СТОИТ ПОСМОТРЕТЬ',ok:'НЕ СТРАШНО'};
+const P=[
+{i:'🖼️',n:'Фотографии',d:'1 240 штук · на вид останутся такими же',a:8.4,b:3.1},
+{i:'🎞️',n:'Видео',d:'86 штук · качество не изменится',a:42,b:19},
+{i:'📸',n:'Скриншоты и картинки из мессенджеров',d:'2 310 штук',a:3.2,b:1.1},
+{i:'📄',n:'Документы и PDF',d:'540 штук',a:2.6,b:1.4},
+{i:'👯',n:'Одинаковые файлы',d:'312 копий · оставлю по одной',a:5.7,b:0},
+{i:'📦',n:'Старые установщики программ',d:'64 файла · программы уже установлены',a:11.8,b:0}];
+const O=[
+{i:'🗓️',n:'Разложить фото и видео по папкам',d:'Год → месяц, например «2024 / Июль»'},
+{i:'📥',n:'Разобрать папку «Загрузки»',d:'Документы, картинки, программы — каждое в свою папку'},
+{i:'🌫️',n:'Найти размытые и неудачные фото',d:'Покажу их, а вы решите, что оставить'}];
+const X=[
+{i:'🚀',t:'Почему компьютер долго включается',d:'Покажу программы, которые запускаются вместе с Windows.'},
+{i:'🐢',t:'Почему компьютер тормозит',d:'Кто сейчас нагружает компьютер и что с этим сделать.'},
+{i:'📡',t:'Кто подключён к моему компьютеру',d:'Проверю, не связан ли кто-то с вашим компьютером через интернет.'},
+{i:'🧩',t:'Опасные дополнения в браузере',d:'Найду дополнения, которые следят за вами или показывают рекламу.'},
+{i:'🩹',t:'Старые программы с «дырами»',d:'Подскажу, что обновить, чтобы через них не залез вирус.'},
+{i:'🔐',t:'Сейф для паролей и документов',d:'Запертая папка, которая открывается только вашим паролем.'},
+{i:'💾',t:'Копия важных файлов',d:'Помогу сохранить фото и документы на флешку или другой диск.'},
+{i:'📋',t:'Отчёт для мастера',d:'Понятный итог проверки, который можно распечатать или отправить.'}];
+const SAY={ov:'Привет! Нажмите большую зелёную кнопку — я проверю компьютер и расскажу простыми словами, что нашёл.',
+ sec:'Нажмите на любую строчку — объясню, что это и чем грозит. Без вашего согласия я ничего не трогаю.',
+ space:'Отметьте галочками, что сделать, и нажмите «Сжать». Оригиналы удаляю только с вашего разрешения.',
+ more:'Здесь дополнительные полезные проверки. Выберите любую.'};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],fm=n=>n.toFixed(1).replace('.',',');
+let ti;function say(t){clearInterval(ti);let i=0;const e=$('#say');e.textContent='';ti=setInterval(()=>{e.textContent=t.slice(0,++i);if(i>=t.length)clearInterval(ti)},16)}
+function toast(t){const e=document.createElement('div');e.className='toast';e.textContent=t;document.body.append(e);setTimeout(()=>e.remove(),2600)}
+function modal(h,b,btns){let m=$('.modal');if(!m){m=document.createElement('div');m.className='modal';document.body.append(m)}
+ m.innerHTML=`<div class="card"><h3>${h}</h3><p>${b}</p><div class="acts"></div></div>`;
+ btns.forEach(x=>{const e=document.createElement('button');e.className=x.k||'btn';e.textContent=x.t;e.onclick=()=>{m.classList.remove('on');x.f&&x.f()};m.querySelector('.acts').append(e)});m.classList.add('on')}
+function go(id){$$('.page').forEach(p=>p.classList.toggle('on',p.id===id));$$('.nv').forEach(b=>b.classList.toggle('on',b.dataset.go===id));scrollTo(0,0);say(SAY[id])}
+$('#list').innerHTML=F.map((f,i)=>`<div class="card f c-${f.c}${i?'':' open'}" data-i="${i}"><div class="top"><span class="dot"></span><div class="tx"><span class="lbl">${L[f.c]}</span><b>${f.t}</b></div><span class="arr">Подробнее ▾</span></div>
+<div class="more"><div class="q"><span>&gt; ЧТО ЭТО</span><p>${f.w}</p></div><div class="q"><span>&gt; ЧЕМ ОПАСНО</span><p>${f.r}</p></div><div class="q"><span>&gt; Я СОВЕТУЮ</span><p>${f.s}</p></div>
+<div class="acts"><button class="btn pri" data-a="fix">${f.a}</button><button class="btn" data-a="keep">Это моё, не трогать</button><button class="link" data-a="del">Удалить насовсем…</button></div>
+<details><summary>Для знающих: где лежит</summary><code>${f.p}</code>${f.sys||''}</details></div></div>`).join('');
+const tile=(x,ch,extra)=>`<label class="card tile"><input type="checkbox"${ch?' checked':''}><span class="box"></span><span class="e">${x.i}</span><span><b>${x.n}</b><small>${x.d}</small>${extra||''}</span></label>`;
+$('#packs').innerHTML=P.map(p=>tile(p,1,`<div class="sz">${fm(p.a)} ГБ → ${fm(p.b)} ГБ <em>(−${fm(p.a-p.b)})</em></div>`)).join('');
+$('#order').innerHTML=O.map(o=>tile(o,0)).join('');
+$('#extras').innerHTML=X.map(x=>`<div class="card x"><span class="e">${x.i}</span><b>${x.t}</b><p>${x.d}</p><button class="btn">Открыть</button></div>`).join('');
+function total(){let s=0;$$('#packs input').forEach((c,i)=>{if(c.checked)s+=P[i].a-P[i].b});$('#tot').innerHTML=`освободится примерно <span class="glow">${fm(s)} ГБ</span>`;return s}
+document.addEventListener('change',total);total();
+document.addEventListener('click',ev=>{const t=ev.target;let e=t.closest('[data-go]');if(e)return go(e.dataset.go);
+ e=t.closest('.f .top');if(e){const f=e.parentElement;if(!f.classList.contains('done'))f.classList.toggle('open');return}
+ e=t.closest('[data-a]');if(!e)return;const card=e.closest('.f'),f=F[card.dataset.i],a=e.dataset.a;
+ const done=txt=>{card.classList.add('done');card.classList.remove('open');card.querySelector('.arr').textContent=txt;toast('В макете ничего не меняется')};
+ if(a==='keep')return modal('Оставить как есть?','Я больше не буду показывать эту находку. Передумаете — её можно вернуть в настройках.',[{t:'Отмена'},{t:'Да, это моё',k:'btn pri',f:()=>done('✓ Оставлено')}]);
+ if(a==='fix')return modal(f.a+'?',f.s+' Ничего не удаляется.',[{t:'Не сейчас'},{t:'Да, '+f.a.toLowerCase(),k:'btn pri',f:()=>done('✓ Готово')}]);
+ modal('Удалить насовсем?',`«${f.t}» отправится в Корзину Windows, оттуда его ещё можно достать. Если это нужный Windows файл, я удалять не дам и объясню почему.`,[{t:'Не удалять',k:'btn pri'},{t:'Да, удалить',k:'btn red',f:()=>done('✓ Удалено в Корзину')}])});
+$('#scan').onclick=()=>{const h=$('#hero');if(h.classList.contains('scanning'))return;h.classList.add('scanning');say('Проверяю… Можно не ждать: пока я работаю, компьютером можно пользоваться.');
+ const st=['Смотрю, что запускается при включении…','Ищу скрытые и шпионские программы…','Проверяю, какие папки видны другим…','Ищу пароли и личные данные на виду…','Считаю, сколько места можно освободить…'];let n=0;
+ const tm=setInterval(()=>{n+=1;$('.prog i').style.width=n+'%';$('#step').textContent=st[Math.min(4,Math.floor(n/20))];
+  if(n>=100){clearInterval(tm);h.classList.remove('scanning');$('#step').textContent='Готово! Проверено только что.';$$('#res .row').forEach(r=>{r.classList.remove('flash');void r.offsetWidth;r.classList.add('flash')});say('Готово! Самое важное — красная строчка. Нажмите «Разобраться», и я всё объясню.')}},45)};
+$('#squeeze').onclick=()=>{const s=total();if(!s)return toast('Отметьте хотя бы одну галочку в шаге 1');
+ modal('Сжать и навести порядок?',`Сделаю сжатые копии и освобожу примерно ${fm(s)} ГБ. Оригиналы пока останутся. Когда закончу, покажу результат и спрошу, можно ли удалить старые файлы.`,[{t:'Отмена'},{t:'Начать',k:'btn pri',f:()=>toast('В макете ничего не меняется')}])};
+go((location.hash||'#ov').slice(1));addEventListener('hashchange',()=>go(location.hash.slice(1)||'ov'));
+</script>

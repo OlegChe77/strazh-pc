@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Страж ПК</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+ <div class="logo"><span class="glow">STRAZH</span>://пк<small>помощник для вашего компьютера</small></div>
+ <nav>
+  <button class="nv" data-go="ov">🏠 Главная</button>
+  <button class="nv" data-go="sec">🛡️ Защита</button>
+  <button class="nv" data-go="space">🧹 Место на диске</button>
+  <button class="nv" data-go="more">🧰 Ещё</button>
+ </nav>
+ <button class="help" id="help" type="button">❤ Помощь проекту</button>
+</header>
+<div class="upd hide" id="upd"></div>
+<main>
+ <section class="page" id="ov">
+  <div class="hero" id="hero">
+   <div class="radar"></div>
+   <div class="tx">
+    <h1 class="title">Проверим ваш компьютер?</h1>
+    <p class="lead" style="margin:0">Я поищу вредные программы, папки, открытые для чужих, пароли на виду и то, что занимает лишнее место. <b>Сам ничего не удаляю</b> — сначала объясню и спрошу.</p>
+    <button class="btn pri go" id="scan" type="button">▶ ПРОВЕРИТЬ КОМПЬЮТЕР</button>
+    <button class="btn hide" id="scanStop" type="button" style="margin-left:10px">Остановить</button>
+    <div class="prog"><i></i></div><div class="step" id="step"></div>
+   </div>
+  </div>
+  <div id="res"></div>
+ </section>
+
+ <section class="page" id="sec">
+  <h1 class="title">&gt; Защита</h1>
+  <p class="lead">Вот что я нашёл. Сверху — самое важное. Нажмите на строчку, и я объясню простыми словами.</p>
+  <div id="secHead"></div>
+  <div id="list"></div>
+ </section>
+
+ <section class="page" id="space">
+  <h1 class="title">&gt; Место на диске</h1>
+  <p class="lead">Сделаю файлы легче и найду лишнее. Сначала сжатые копии, оригиналы — только когда вы разрешите.</p>
+  <div class="card guard"><span class="e">🛡️</span><span>В папки Windows и установленных программ <b>я не захожу</b>. Смотрю только ваши личные папки. Всё, что убираю, уходит в Корзину — оттуда можно достать.</span></div>
+  <div id="pendBox"></div>
+  <div id="spaceBody"></div>
+  <div id="orgBox"></div>
+  <div id="weeklyBox"></div>
+ </section>
+
+ <section class="page" id="more">
+  <h1 class="title">&gt; Ещё полезное</h1>
+  <p class="lead">Карантин и дополнительные возможности.</p>
+  <div id="moreBody"></div>
+ </section>
+
+ <section class="page" id="vault">
+  <button class="link n" data-go="more" type="button">← Назад к «Ещё»</button>
+  <h1 class="title">&gt; Сейф для паролей</h1>
+  <p class="lead">Запертое хранилище внутри программы: пароли и важные файлы шифруются и открываются только вашим паролем.</p>
+  <div id="vaultBody"></div>
+ </section>
+
+ <section class="page" id="ext">
+  <button class="link n" data-go="more" type="button">← Назад к «Ещё»</button>
+  <h1 class="title">&gt; Дополнения в браузере</h1>
+  <p class="lead">Найду дополнения, у которых слишком много прав или которые поставились не из магазина.</p>
+  <div id="extBody"></div>
+ </section>
+</main>
+<div class="say"><span class="glow">&gt;</span><span><span id="say"></span><span class="cur"></span></span></div>
+<div class="modal" id="modal"></div>
+<script src="app.js"></script>
+<script src="extra.js"></script>
+<script src="update.js"></script>
+</body>
+</html>

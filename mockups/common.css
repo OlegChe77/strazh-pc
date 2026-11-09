@@ -1,0 +1,54 @@
+/* Общие компоненты макетов. Цвета и скругления задаёт каждый вариант через :root */
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 var(--font,"Segoe UI",system-ui,sans-serif)}
+h1,h2,h3,h4,p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+.muted{color:var(--muted)}
+.page{display:none}.page.on{display:block;animation:fi .25s}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.btn{border:1px solid var(--line);background:var(--panel2);padding:8px 14px;border-radius:calc(var(--r)*.7)}
+.btn:hover{filter:brightness(1.15)}
+.btn.pri{background:var(--acc);color:var(--onacc,#fff);border-color:transparent;font-weight:600}
+.btn.bad{color:var(--bad);border-color:var(--bad);background:transparent}
+.btn.big{padding:13px 22px;font-size:15px}
+.h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px;flex-wrap:wrap}
+.h h2{font-size:21px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.help{font-size:12px;color:var(--muted);text-decoration:none;display:inline-block;padding:8px 10px}
+.help:hover{color:var(--fg)}
+.scanwrap{margin:0 0 16px}
+.scanbar{height:8px;background:var(--panel2);border-radius:9px;overflow:hidden;margin:10px 0 6px}
+.scanbar i{display:block;height:100%;width:0;background:var(--acc);transition:width .2s}
+.scantxt{color:var(--muted);font-size:13px}
+/* находки */
+.f{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:var(--r);margin:0 0 10px;overflow:hidden}
+.f.hi{--c:var(--bad)}.f.mid{--c:var(--warn)}.f.low{--c:var(--ok)}
+.f .top{display:flex;gap:12px;align-items:center;padding:12px 14px;cursor:pointer}
+.f .ico,.pack .ico{font-size:24px}
+.tt{flex:1;min-width:0}.tt b{display:inline-block}.tt small{display:block;color:var(--muted);word-break:break-all}
+.sev{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;background:color-mix(in srgb,var(--c) 20%,transparent);color:var(--c);white-space:nowrap}
+.f .more{display:none;padding:2px 16px 16px;border-top:1px dashed var(--line)}
+.f.open .more{display:block}
+.f h4{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:12px 0 3px}
+/* сжатие */
+.guard{display:flex;gap:10px;align-items:center;padding:11px 14px;border-radius:var(--r);background:color-mix(in srgb,var(--ok) 14%,transparent);border:1px solid color-mix(in srgb,var(--ok) 40%,transparent);margin:0 0 14px}
+.seg{display:inline-flex;background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:3px}
+.seg button{border:0;background:none;padding:7px 16px;border-radius:99px;color:var(--muted)}
+.seg button.on{background:var(--acc);color:var(--onacc,#fff)}
+.modehint{margin:8px 0 16px}
+.pack{display:flex;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:0 0 8px;cursor:pointer}
+.pack input{accent-color:var(--acc);width:18px;height:18px}
+.pack .sz{text-align:right;white-space:nowrap;font-size:13px}.pack .sz b{color:var(--ok)}
+.bar{height:6px;background:color-mix(in srgb,var(--ok) 35%,var(--panel2));border-radius:9px;margin:6px 0 4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc)}
+.sum{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px}
+/* прочее */
+.xs{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.x .ico{font-size:28px}.x p{margin:4px 0 12px;font-size:13px}
+.modal{position:fixed;inset:0;display:none;place-items:center;background:#0009;z-index:9;padding:16px}
+.modal.on{display:grid}
+.modal .box{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:var(--r);padding:22px;max-width:440px}
+.modal h3{margin-bottom:8px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:99px;z-index:10;box-shadow:0 6px 24px #0006}

@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.testdata/
+.testinstall/
+*.log
+mockups/v[1-5].html
