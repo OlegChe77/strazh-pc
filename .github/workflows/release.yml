@@ -1,0 +1,28 @@
+# Сборка и выпуск версии: git tag v0.2.1 && git push origin v0.2.1
+# Версия в package.json должна совпадать с тегом (без буквы v).
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Самопроверка
+        run: npm run selftest
+      - name: Сборка и публикация релиза
+        run: npm run release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
